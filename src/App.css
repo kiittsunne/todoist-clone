@@ -1,38 +1,671 @@
+/* Theme Settings */
+:root {
+  --textColor: #202020;
+  --textFadedColor: #20202094;
+  --veryLightGrey: rgb(212, 212, 212);
+  --evenLighterGrey: #eeeeee;
+  --prettyLightGrey: #dedede;
+  --todoistRed: #db4b3f;
+}
+
+/* App.js styles */
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Manrope", sans-serif;
+  color: var(--textColor);
+}
+
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+  width: 100vw;
   min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.appContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+textarea:focus,
+input:focus,
+div:focus {
+  outline: blue;
+}
+
+/* Side navbar styles */
+.navbarContainer {
+  background-color: #fafafa;
+  width: 260px;
+  min-height: 400px;
+  height: 95vh;
+  position: sticky;
+  left: 0;
+  top: 5vh;
+  box-sizing: border-box;
+  padding: 1.5em 0.8em 1.5em 2.5em;
+  font-size: 13.5px;
+  font-weight: lighter;
+}
+
+.constants {
+  padding-bottom: 1.5em;
+}
+
+.navbarContainer li {
+  list-style: none;
+  display: flex;
+  margin-top: 0.4em;
+  padding: 0.5em 0 0.5em 0.5em;
+  cursor: pointer;
+}
+
+.navbarContainer li:hover {
+  background-color: var(--evenLighterGrey);
+  border-radius: 5pt;
+}
+
+.navbarContainer .icon {
+  margin: 0.1em 1em 0 0;
+  font-size: 18px;
+}
+
+/* Top navbar styles */
+.topbarContainer {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 5vh;
+  background-color: var(--todoistRed);
+  box-sizing: border-box;
+  padding: 0.5em 0 0.4em 0;
+  max-width: 100vw;
+}
+
+.toggleContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-right: 2em;
+  width: 8em;
+  padding: 0.2em 0 0.2em 0;
+}
+
+.topbarContainer .icon,
+.logo {
+  fill: white;
+  font-size: 22px;
+}
+
+.topbarContainer .logo {
+  position: fixed;
+  left: 1em;
+  margin-top: 0.15em;
+}
+
+/* Task Container styles */
+.taskContainer {
+  position: relative;
+  width: 60%;
+  margin-top: 1.8em;
+  margin-left: auto;
+  margin-right: auto;
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
+}
+
+.taskContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.masked-overflow {
+  /* scroll bar width, for use in mask calculations */
+  --scrollbar-width: 8px;
+
+  /* mask fade distance, for use in mask calculations */
+  --mask-height: 10px;
+
+  /* If content exceeds height of container, overflow! */
+  overflow-y: auto;
+
+  /* Need to make sure container has bottom space,
+otherwise content at the bottom is always faded out */
+  padding-bottom: var(--mask-height);
+
+  /* The CSS mask */
+
+  /* The content mask is a linear gradient from top to bottom */
+  --mask-image-content: linear-gradient(
+    to bottom,
+    transparent,
+    black var(--mask-height),
+    black calc(80% - var(--mask-height)),
+    transparent
+  );
+
+  /* Here we scale the content gradient to the width of the container 
+minus the scrollbar width. The height is the full container height */
+  --mask-size-content: calc(100% - var(--scrollbar-width)) 100%;
+
+  /* The scrollbar mask is a black pixel */
+  --mask-image-scrollbar: linear-gradient(black, black);
+
+  /* The width of our black pixel is the width of the scrollbar.
+The height is the full container height */
+  --mask-size-scrollbar: var(--scrollbar-width) 100%;
+
+  /* Apply the mask image and mask size variables */
+  mask-image: var(--mask-image-content), var(--mask-image-scrollbar);
+  mask-size: var(--mask-size-content), var(--mask-size-scrollbar);
+
+  /* Position the content gradient in the top left, and the 
+scroll gradient in the top right */
+  mask-position: 0 0, 100% 0;
+
+  /* We don't repeat our mask images */
+  mask-repeat: no-repeat, no-repeat;
+}
+
+.headerContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  box-sizing: border-box;
+  padding: 0 0.5em 0 0.5em;
+}
+
+.headerContainer .icon,
+h1 {
+  fill: var(--todoistRed);
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+.headerContainer .icon {
+  cursor: pointer;
+}
+
+.contentContainer {
+  width: 98%;
+  height: 20vh;
+  box-sizing: border-box;
+  margin: 0 auto 1em auto;
+  padding: 0.2em;
+}
+
+.existingTaskContainer {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+[data-addspacing="true"] {
+  height: 25em;
+}
+
+.addTaskButton {
+  color: var(--textFadedColor);
+  vertical-align: middle;
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  width: 80px;
+}
+
+.addTaskButton:hover > .icon {
+  fill: white;
+  background-color: var(--todoistRed);
+}
+
+.addTaskButton .icon {
+  fill: var(--todoistRed);
+  font-size: 0.9em;
+  margin-top: 0.25em;
+  border-radius: 10pt;
+}
+
+.addTaskButton h2 {
+  font-weight: lighter;
+  font-size: 0.9em;
+  margin-left: 0.3em;
+}
+
+.addTaskButton [data-mouseoverstate="true"] {
+  fill: white;
+  background-color: var(--todoistRed);
+}
+
+/* TaskForm Styles */
+
+.taskFormContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  border: 0.01em var(--textFadedColor) solid;
+  border-radius: 3pt;
+  box-sizing: border-box;
+  padding: 0.5em;
+  height: 180px;
+  max-height: 250px;
+}
+
+.inputContainer input {
+  border: none;
+  box-sizing: border-box;
+  padding: 0.5em;
+}
+
+.inputContainer #title {
+  font-weight: bold;
+}
+
+.inputContainer #title::placeholder {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.inputContainer #description {
+  margin: 0.5em 0 0.5em 0;
+  padding: 0.5em;
+  height: 100px;
+  font-size: 14.4px;
+  padding-top: 0em;
+  text-align: start;
+  resize: none;
+  border: white;
+}
+
+.dataTogglesContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.classificationDataToggleContainer {
+  display: flex;
+  flex-direction: row;
+  font-size: 12px;
+}
+
+.classificationDataToggleContainer * {
+  margin-right: 0.4em;
+  cursor: pointer;
+}
+
+.dateToggle,
+.projectToggle {
+  border: 0.01em var(--textFadedColor) solid;
+  padding: 0.5em;
+  border-radius: 5pt;
+}
+
+.labelDataToggleContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.labelDataToggleContainer div {
+  margin: 0.1em 0.5em 0 0;
+  padding: 0.25em;
+  box-sizing: border-box;
+}
+
+.formIcon {
+  fill: var(--veryLightGrey);
+  cursor: pointer;
+}
+
+.dateToggle:hover > .formIcon,
+.projectToggle:hover > .formIcon,
+.formIcon :hover {
+  fill: var(--todoistRed);
+}
+
+[data-recording="true"] {
+  fill: var(--todoistRed);
+}
+
+.outputContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.outputContainer > div,
+.outputContainer > input {
+  margin: 0.5em 0 0 0.5em;
+  padding: 0.3em;
+  border-radius: 3pt;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.cancelButton {
+  background-color: var(--veryLightGrey);
+  color: var(--textFadedColor);
+}
+
+.submitButton {
+  border: none;
+  background-color: var(--todoistRed);
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+/* Task Styles */
+
+.taskBodyContainer {
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  padding: 0.3em;
+  border-bottom: 1px solid var(--textColor);
+  margin-bottom: 0.5em;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.taskBodyContainer:hover > .taskEdit > .icon {
+  visibility: visible;
+}
+
+.taskCheckbox {
+  border-radius: 1000pt;
+  box-sizing: border-box;
+  margin: 0.5em;
+  height: 1.2em;
+  width: 1.2em;
+  border: 1.5px solid var(--textFadedColor);
+  cursor: pointer;
+}
+
+.taskCheckbox:hover > .icon {
+  visibility: visible;
+}
+
+.taskCheckbox .icon {
+  fill: var(--textFadedColor);
+  font-size: 1em;
+  visibility: hidden;
+}
+
+.taskContent {
+  display: flex;
+  flex-direction: column;
+  margin: 0.3em 1em 0.25em 0.5em;
+  min-height: 80px;
+  width: 80%;
+}
+
+.taskContent .title {
+  font-weight: bold;
+  font-size: 12pt;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.taskContent .description {
+  font-size: 11pt;
+  color: var(--textFadedColor);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  width: 100%;
+}
+
+.taskContent [data-showall="true"] {
+  white-space: normal;
+  overflow: visible;
+  height: fit-content;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.taskContent .taskData {
+  display: flex;
+  flex-direction: row;
+}
+
+.taskContent > .taskData > div {
+  font-size: 14px;
+  margin: 0.25em 0.4em 0.25em 0;
+  padding: 0.5em 0 0.5em 0;
+  color: var(--textFadedColor);
+}
+
+.taskContent .taskData .icon {
+  box-sizing: border-box;
+  fill: var(--veryLightGrey);
+  height: 15px;
+  width: 15px;
+  padding-top: 0.2em;
+  margin: 0 0.3em 0 0.2em;
+}
+
+.taskContent .taskData .taskCollapse {
+  color: var(--prettyLightGrey);
+  visibility: hidden;
+}
+
+[data-showall="true"] .taskContent .taskData .taskCollapse {
+  visibility: visible;
+  cursor: pointer;
+}
+
+.taskEdit {
+  box-sizing: border-box;
+  margin: 0.3em;
+  height: 1.6em;
+}
+
+.taskEdit .icon {
+  fill: var(--textFadedColor);
+  font-size: 1.3em;
+  margin: 0.1em 0.1em 0 0.1em;
+  visibility: hidden;
+  cursor: pointer;
+}
+
+.taskEdit .icon:hover {
+  background-color: var(--veryLightGrey);
+  border-radius: 3pt;
+  box-sizing: border-box;
+  padding: 0.05em;
+}
+
+/* EditTaskForm styles */
+
+.taskCheckboxEdit {
+  border-radius: 1000pt;
+  box-sizing: border-box;
+  margin: 0.5em;
+  height: 1.2em;
+  width: 1.2em;
+  border: 1.5px solid var(--textFadedColor);
+  background-color: var(--evenLighterGrey);
+}
+
+.taskCheckboxEdit .icon {
+  fill: var(--textFadedColor);
+  font-size: 1em;
+  visibility: hidden;
+}
+
+.titleEdit {
+  resize: none;
+  border: white;
+  height: fit-content;
+  font-weight: bold;
+  font-size: 12pt;
+  height: 22px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.taskContent .descriptionEdit {
+  font-size: 11pt;
+  color: var(--textFadedColor);
+  cursor: text;
+  width: 100%;
+  resize: none;
+  border: white;
+}
+
+button {
+  border: none;
+  background-color: transparent;
+}
+
+.taskEditSubmit {
+  box-sizing: border-box;
+  height: 1.6em;
+}
+
+.taskEditSubmit .icon {
+  fill: var(--textFadedColor);
+  font-size: 1.7em;
+  margin: 0.1em;
+  cursor: pointer;
+  background-color: var(--veryLightGrey);
+  border-radius: 3pt;
+  box-sizing: border-box;
+  padding: 0.05em;
+}
+
+.taskEditSubmit .icon:hover {
+  fill: white;
+  background-color: var(--todoistRed);
+  border-radius: 3pt;
+  box-sizing: border-box;
+  padding: 0.05em;
+}
+
+.taskContent .taskDataEdit {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.taskContent .taskDataEdit div {
+  font-size: 14px;
+  margin: 0.25em 0.4em 0.25em 0;
+  padding: 0.5em 0 0.5em 0;
+  color: var(--textFadedColor);
+  width: fit-content;
+  height: fit-content;
+}
+
+.taskContent .taskDataEdit .icon {
+  box-sizing: border-box;
+  fill: var(--veryLightGrey);
+  height: 15px;
+  width: 15px;
+  padding-top: 0.2em;
+  margin: 0 0.3em 0 0.2em;
+}
+
+.taskDataEdit .dataToggles {
+  display: flex;
+  flex-direction: row;
+}
+
+.taskDataEdit .dueDate {
+  position: relative;
+  left: 0;
+  bottom: 0;
+  padding: 0.2em 0 0.2em 0;
+}
+
+.taskDataEdit .taskToggles {
+  display: flex;
+  flex-direction: row;
+}
+
+.taskDelete :hover {
+  fill: var(--todoistRed);
+  cursor: pointer;
+}
+
+.datePickerContainer {
+  position: relative;
+  width: 100%;
+}
+
+input[type="date"] {
+  opacity: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+  height: 2em;
+  z-index: 100;
+}
+
+/* make the native arrow invisible and stretch it over the whole field so you can click anywhere in the input field to trigger the native datepicker*/
+input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  height: auto;
+  cursor: pointer;
+  background-color: grey;
+}
+
+/* adjust increase/decrease button */
+input[type="date"]::-webkit-inner-spin-button {
+  z-index: 1;
+}
+
+/* adjust clear button */
+input[type="date"]::-webkit-clear-button {
+  z-index: 1;
+}
+
+/* Completed Task styles */
+
+.taskBodyContainer.completed {
+  background-color: rgba(245, 245, 245, 0.804);
+  border-bottom: var(--prettyLightGrey) 1px solid;
+}
+
+.completedTaskCheckBox {
+  border-radius: 1000pt;
+  box-sizing: border-box;
+  margin: 0.5em;
+  height: 1.2em;
+  width: 1.2em;
+  border: 1.5px solid var(--todoistRed);
+  background-color: var(--todoistRed);
+}
+
+.completedTaskCheckBox .completedIcon {
+  visibility: visible;
+  fill: white;
+}
+
+.taskBodyContainer .title.completed {
+  color: var(--textFadedColor);
+  text-decoration: line-through;
+}
+
+.taskBodyContainer .description.completed {
+  color: var(--prettyLightGrey);
+}
+
+.taskData .dueDate.completed,
+.taskData .icon.completed {
+  fill: var(--todoistRed);
+  color: var(--todoistRed);
 }
