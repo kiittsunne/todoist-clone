@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/todoist-clone/static/css/main.6adec051.css",
+    "main.js": "/todoist-clone/static/js/main.576cd45d.js",
+    "index.html": "/todoist-clone/index.html",
+    "main.6adec051.css.map": "/todoist-clone/static/css/main.6adec051.css.map",
+    "main.576cd45d.js.map": "/todoist-clone/static/js/main.576cd45d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6adec051.css",
+    "static/js/main.576cd45d.js"
+  ]
+}
