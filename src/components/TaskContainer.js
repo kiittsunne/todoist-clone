@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import { VscEye } from "react-icons/vsc";
 import { IoMdAdd } from "react-icons/io";
 import TaskForm from "./TaskForm";
@@ -6,46 +6,164 @@ import Task from "./Task";
 import EditTaskForm from "./EditTaskForm";
 import CompletedTask from "./CompletedTask";
 
+//======== handleTaskChange Reducer Function =========//
+
+const task = {
+  CREATE: "create",
+  READ: "read",
+  INIT_EDIT: "initEditStatus",
+  UPDATE: "update",
+  DELETE: "delete",
+  COMPLETE: "complete",
+};
+const handleTaskChange = (taskList, action) => {
+  switch (action.type) {
+    case task.CREATE:
+      return [...taskList, action.payload];
+    case task.READ:
+      action.payload.setTaskNames([...action.payload.names]);
+      return [...action.payload.tasks];
+    case task.UPDATE:
+      return taskList.map((d, i) =>
+        i === action.payload.index
+          ? { ...action.payload.task, editStatus: false }
+          : d
+      );
+    case task.INIT_EDIT:
+      return taskList.map((d, i) =>
+        i === action.payload ? { ...d, editStatus: true } : d
+      );
+    case task.DELETE:
+      return taskList.filter((d, i) => i !== action.payload);
+    case task.COMPLETE:
+      return taskList.map((d, i) =>
+        i === action.payload ? { ...d, completedStatus: true } : d
+      );
+    default:
+      break;
+  }
+};
+//==================================================//
+
 const TaskContainer = () => {
-  /* Handles toggling between Add Task button & New Task Form */
+  const [taskList, dispatch] = useReducer(handleTaskChange, []);
+  const [taskNames, setTaskNames] = useState([]);
+  const [postTask, setPostTask] = useState({});
+  const [putTask, setPutTask] = useState();
+  const [deleteTask, setDeleteTask] = useState();
+
+  //================== API Requests ==================//
+  /* Post */
+  useEffect(() => {
+    let postRequestOptions = {
+      method: "POST",
+      body: JSON.stringify(postTask),
+      redirect: "follow",
+    };
+
+    fetch(
+      `https://todoist-clone-e2dd8-default-rtdb.firebaseio.com/tasklist.json`,
+      postRequestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => result)
+      .catch((error) => console.log("error", error));
+  }, [postTask]);
+
+  /* Get */
+  useEffect(() => {
+    const fetchData = async () => {
+      const getRequestOptions = {
+        method: "GET",
+        redirect: "follow",
+      };
+      const res = await fetch(
+        `https://todoist-clone-e2dd8-default-rtdb.firebaseio.com/tasklist.json`,
+        getRequestOptions
+      );
+
+      const data = await res.json();
+      dispatch({
+        type: "read",
+        payload: {
+          tasks: Object.values(data),
+          names: Object.keys(data),
+          setTaskNames,
+        },
+      });
+    };
+    fetchData();
+  }, []);
+
+  /* Put */
+  useEffect(() => {
+    if (putTask !== undefined) {
+      let putRequestOptions = {
+        method: "PUT",
+        body: JSON.stringify(putTask.task),
+        redirect: "follow",
+      };
+      fetch(
+        `https://todoist-clone-e2dd8-default-rtdb.firebaseio.com/tasklist/${
+          taskNames[putTask.index]
+        }.json`,
+        putRequestOptions
+      )
+        .then((response) => response.json())
+        .then((result) => console.log(result))
+        .catch((error) => console.log("error", error));
+    }
+  }, [putTask]);
+
+  /* Delete */
+  useEffect(() => {
+    let deleteRequestOptions = {
+      method: "DELETE",
+      redirect: "follow",
+    };
+    fetch(
+      `https://todoist-clone-e2dd8-default-rtdb.firebaseio.com/tasklist/${taskNames[deleteTask]}.json`,
+      deleteRequestOptions
+    );
+  }, [deleteTask]);
+
+  //==================================================//
+
+  //========== Task CRUD Reducer Functions ===========//
+  const handleAddNewTask = (task) => {
+    dispatch({ type: "create", payload: task });
+    setPostTask({ ...task });
+  };
+  const handleInitEditStatus = (index) => {
+    dispatch({ type: "initEditStatus", payload: index });
+  };
+  const handleEditedTask = (task, index) => {
+    dispatch({ type: "update", payload: { task, index } });
+    setPutTask({ task: { ...task, editStatus: false }, index: index });
+  };
+  const handleCompleteTask = (task, index) => {
+    dispatch({ type: "complete", payload: index });
+    setPutTask({ task: { ...task, completedStatus: true }, index: index });
+  };
+  const handleDeleteTask = (index) => {
+    dispatch({ type: "delete", payload: index });
+    setDeleteTask(index);
+  };
+
+  //==================================================//
+
+  //======== Conditional Rendering Functions =========//
+
   const [showTaskForm, setShowTaskForm] = useState(false);
+  const [showCompleted, setShowCompleted] = useState(false);
+
   const handleShowTaskForm = () => {
     showTaskForm === false ? setShowTaskForm(true) : setShowTaskForm(false);
   };
-
-  /* Handles Adding of New Task Data */
-  const [taskList, setNewTaskList] = useState([]);
-  // const [task, setTask] = useState({});
-  // const [name, setName] = useState("");
-  const handleAddNewTask = (task) => {
-    setNewTaskList([...taskList, task]);
-  };
-  /* Handles Editing of Existing Task Data */
-  const handleInitEditStatus = (task, index) => {
-    setNewTaskList(
-      taskList.map((d, i) => (i === index ? { ...d, editStatus: true } : d))
-    );
-  };
-  const handleEditedTask = (task, index) => {
-    setNewTaskList(
-      taskList.map((d, i) => (i === index ? { ...task, editStatus: false } : d))
-    );
-  };
-  const handleDeleteTask = (index) => {
-    setNewTaskList(taskList.filter((d, i) => i !== index));
-  };
-  const [showCompleted, setShowCompleted] = useState(false);
   const handleShowCompleted = () => {
     showCompleted === false ? setShowCompleted(true) : setShowCompleted(false);
   };
-  const handleCompleteTask = (index) => {
-    setNewTaskList(
-      taskList.map((d, i) =>
-        i === index ? { ...d, completedStatus: true } : d
-      )
-    );
-  };
-  function showEditComponent(task, index) {
+  const showEditComponent = (task, index) => {
     if (task.editStatus === true) {
       return (
         <EditTaskForm
@@ -107,44 +225,8 @@ const TaskContainer = () => {
     ) {
       return;
     }
-  }
-
-  /* API data fetching / posting */
-  // post
-  useEffect(() => {
-    let postRequestOptions = {
-      method: "POST",
-      body: JSON.stringify(taskList[taskList.length - 1]),
-      redirect: "follow",
-    };
-
-    fetch(
-      `https://todoist-clone-e2dd8-default-rtdb.firebaseio.com/tasklist.json`,
-      postRequestOptions
-    )
-      .then((response) => response.json())
-      .then((result) => console.log(result.name))
-      .catch((error) => console.log("error", error));
-  }, [taskList]);
-  console.log(taskList);
-
-  // useEffect(() => {
-
-  // }, [name])
-
-  // get
-  // useEffect(() => {
-  //   let getRequestOptions = {
-  //     method: "GET",
-  //     redirect: "follow",
-  //   };
-  //   fetch(
-  //     `https://todoist-clone-e2dd8-default-rtdb.firebaseio.com/tasklist.json`,
-  //     getRequestOptions
-  //   )
-  //     .then((response) => response.json())
-  //     .then((result) => console.log(result));
-  // }, []);
+  };
+  //==================================================//
 
   return (
     <div className="taskContainer masked-overflow">

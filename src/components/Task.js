@@ -72,12 +72,12 @@ const Task = (props) => {
   /* Handle Complete Task */
   const handleCompleteTask = (evt) => {
     evt.preventDefault();
-    props.handleCompleteTask(props.index);
+    props.handleCompleteTask(props.task, props.index);
   };
   const [task, setTask] = useState(props.task);
   /* Initiate Editing Interaction */
   const handleInitEdit = () => {
-    props.handleEditStatus(props.task, props.index);
+    props.handleEditStatus(props.index);
   };
 
   return (

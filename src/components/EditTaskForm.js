@@ -91,7 +91,6 @@ const EditTaskForm = (props) => {
             id="title"
             className="titleEdit"
             autoFocus
-            defaultValue="test"
             value={editedTask.title}
             onChange={handleOnChange}
           ></textarea>

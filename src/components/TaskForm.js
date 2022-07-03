@@ -71,6 +71,7 @@ const TaskForm = (props) => {
     date: "Due Date",
     editStatus: false,
     completedStatus: false,
+    name: "",
   };
   const [task, setTask] = useState(initNewTask);
   const handleOnChange = (evt) => {
