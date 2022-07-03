@@ -8,61 +8,61 @@ import {
 import { FaMicrophone } from "react-icons/fa";
 import { MdIncompleteCircle } from "react-icons/md";
 
-const SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
-const mic = new SpeechRecognition();
-
-mic.continuous = true;
-mic.interimResults = true;
-mic.lang = "en-US";
+//=============== WebSpeech API Initialisation ================//
+// const SpeechRecognition =
+//   window.SpeechRecognition || window.webkitSpeechRecognition;
+// const mic = new SpeechRecognition();
+// mic.continuous = true;
+// mic.interimResults = true;
+// mic.lang = "en-US";
+//============================================================//
 
 const TaskForm = (props) => {
-  /* Microphone state handling */
-  const [recordingState, setRecordingState] = useState(false);
-  const [isListening, setIsListening] = useState(false);
-  const [note, setNote] = useState(null);
-  const [savedNotes, setSavedNotes] = useState([]);
-  const handleEvtStyling = () => {
-    if (recordingState === false) {
-      setRecordingState(true);
-    } else setRecordingState(false);
-  };
-  useEffect(() => {
-    handleListen();
-  }, [isListening]);
-  const handleListen = () => {
-    if (isListening) {
-      mic.start();
-      mic.onend = () => {
-        console.log("continue..");
-        mic.start();
-      };
-    } else {
-      mic.stop();
-      mic.onend = () => {
-        console.log("Stopped Mic");
-      };
-    }
-    mic.onstart = () => {
-      console.log("Mics on");
-    };
+  //=============== Microphone state handling ================//
+  // const [recordingState, setRecordingState] = useState(false);
+  // const [isListening, setIsListening] = useState(false);
+  // const [savedNotes, setSavedNotes] = useState([]);
+  // const handleEvtStyling = () => {
+  //   if (recordingState === false) {
+  //     setRecordingState(true);
+  //   } else setRecordingState(false);
+  // };
+  // useEffect(() => {
+  //   handleListen();
+  // }, [isListening]);
+  // const handleListen = () => {
+  //   if (isListening) {
+  //     mic.start();
+  //     mic.onend = () => {
+  //       console.log("continue..");
+  //       mic.start();
+  //     };
+  //   } else {
+  //     mic.stop();
+  //     mic.onend = () => {
+  //       console.log("Stopped Mic");
+  //     };
+  //   }
+  //   mic.onstart = () => {
+  //     console.log("Mics on");
+  //   };
 
-    mic.onresult = (event) => {
-      const transcript = Array.from(event.results)
-        .map((result) => result[0])
-        .map((result) => result.transcript)
-        .join("");
-      console.log(transcript);
-      setNote(transcript);
-      mic.onerror = (event) => {
-        console.log(event.error);
-      };
-    };
-  };
-  const handleSaveNote = () => {
-    setSavedNotes([...savedNotes, note]);
-    setNote("");
-  };
+  //   mic.onresult = (event) => {
+  //     const transcript = Array.from(event.results)
+  //       .map((result) => result[0])
+  //       .map((result) => result.transcript)
+  //       .join("");
+  //     console.log(transcript);
+  //     setTask(transcript);
+  //     mic.onerror = (event) => {
+  //       console.log(event.error);
+  //     };
+  //   };
+  // };
+  // const handleSaveNote = () => {
+  //   setSavedNotes([...savedNotes, task.description]);
+  // };
+  //=======================================================//
 
   /* Task in form state handling */
   const initNewTask = {
@@ -71,7 +71,6 @@ const TaskForm = (props) => {
     date: "Due Date",
     editStatus: false,
     completedStatus: false,
-    name: "",
   };
   const [task, setTask] = useState(initNewTask);
   const handleOnChange = (evt) => {
@@ -201,18 +200,17 @@ const TaskForm = (props) => {
                   name="Voice Recorder"
                   className="formIcon"
                   id="microphone"
-                  data-recording={recordingState}
-                  onClick={() => {
-                    handleEvtStyling();
-                    setIsListening((prevState) => !prevState);
-                  }}
+                  // data-recording={recordingState}
+                  // onClick={() => {
+                  //   setIsListening((prevState) => !prevState);
+                  // }}
                 />
               </div>
               <div name="Label" id="label" className="labelToggle">
                 <MdIncompleteCircle
                   className="formIcon"
-                  onClick={handleSaveNote}
-                  disabled={!note}
+                  // onClick={handleSaveNote}
+                  // disabled={!task.description}
                 />
               </div>
             </div>
@@ -230,7 +228,6 @@ const TaskForm = (props) => {
           />
         </div>
       </form>
-      <p>{note}</p>
     </div>
   );
 };

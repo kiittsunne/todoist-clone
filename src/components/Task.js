@@ -9,6 +9,21 @@ import {
 } from "react-icons/bs";
 
 const Task = (props) => {
+  //=========== Propped Function Handling =============//
+  const [task, setTask] = useState(props.task);
+
+  /* Set completedStatus to true and lift state to TaskContainer */
+  const handleCompleteTask = (evt) => {
+    evt.preventDefault();
+    props.handleCompleteTask(props.task, props.index);
+  };
+  /* Set conditional rendering boolean to display EditTaskForm */
+  const handleInitEdit = () => {
+    props.handleEditStatus(props.index);
+  };
+  //==================================================//
+
+  //======= Component Display State Functions =========//
   /* Handle date display in task body */
   function formatDate() {
     const monthString = props.task.date.slice(5, 7);
@@ -69,16 +84,7 @@ const Task = (props) => {
       setShow(false);
     } else setShow(true);
   };
-  /* Handle Complete Task */
-  const handleCompleteTask = (evt) => {
-    evt.preventDefault();
-    props.handleCompleteTask(props.task, props.index);
-  };
-  const [task, setTask] = useState(props.task);
-  /* Initiate Editing Interaction */
-  const handleInitEdit = () => {
-    props.handleEditStatus(props.index);
-  };
+  //==================================================//
 
   return (
     <div className="taskBodyContainer" data-showall={show}>
