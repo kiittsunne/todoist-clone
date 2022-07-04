@@ -6,10 +6,10 @@
 
 I initially proposed to complete a project that would do the following, and the marked items were what I ultimately achieved (fully/ partially):
 
-- [ ] Contribute to open source
-- [-] Integrate accessibility features (WebSpeech API for TTS/STT transcription)
-- [x] Be a full CRUD app, hosted on Firebase
-- [-] Mimic Todoist's original UI, interaction design, and features as closely as time would allow
+❌ Contribute to open source
+🟡 Integrate accessibility features (WebSpeech API for TTS/STT transcription)
+✅ Be a full CRUD app, hosted on Firebase
+🟡 Mimic Todoist's original UI, interaction design, and features as closely as time would allow
 
 ![CRUD operations](https://i.imgur.com/thyf0i7.gif)
 
