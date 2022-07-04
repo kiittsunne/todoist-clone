@@ -40,7 +40,7 @@ I began the project with too many isolated goals and underestimated the difficul
 
 #### Obstacles & Problem-Solving Strategies
 
-**1. Problems setting up CRUD RESTful API paths **
+**1. Problems setting up CRUD RESTful API paths**
 
 Create, Read & Update paths created some confusion - I originally tried to integrate them directly into the same reducer function/ handler ladder that the UI components used to manage state, but this often resulted in duplicate data.
 
