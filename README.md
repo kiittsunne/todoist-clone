@@ -1,6 +1,6 @@
 # Todoist Clone
 
-![Firebase RTD in action](https://imgur.com/a/v6DPZNd)
+![Firebase RTD in action](https://i.imgur.com/JFu6zKs.gif)
 
 ### Initial Goals vs Final Outcome
 
@@ -11,9 +11,9 @@ I initially proposed to complete a project that would do the following, and the 
 - [x] Be a full CRUD app, hosted on Firebase
 - [-] Mimic Todoist's original UI, interaction design, and features as closely as time would allow
 
-![CRUD operations](https://imgur.com/a/wvmtWhr)
+![CRUD operations](https://i.imgur.com/thyf0i7.gif)
 
-![UI Design](https://imgur.com/a/0phZlWN)
+![UI Design](https://i.imgur.com/9aDFOIg.gif)
 
 ### Technologies Used
 
@@ -23,7 +23,7 @@ I initially proposed to complete a project that would do the following, and the 
 
 ### Project Architecture / Wireframes / User Story
 
-![Component Architecture & Task Form UI Wireframe](https://imgur.com/a/7jqnUXD)
+![Component Architecture & Task Form UI Wireframe](https://i.imgur.com/TI5ssmR.jpeg)
 
 **Uncompleted User Story**
 
